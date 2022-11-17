@@ -96,7 +96,7 @@ public class ServiceMethodGeneratorTest {
 				+ "@Path(\"/path/to/here\")\r\n"
 				+ "@Consumes({MediaType.APPLICATION_JSON})\r\n"
 				+ "@Produces({MediaType.APPLICATION_JSON})\r\n"
-				+ "public void pathToHere(SuperType name2, @QueryParameter boolean checked, @QueryParameter String type) {\r\n"
+				+ "public void pathToHere(SuperType name2, @QueryParam(\"checked\") boolean checked, @QueryParam(\"type\") String type) {\r\n"
 				+ "	//TODO\r\n"
 				+ "}\r\n"
 				+ "",
@@ -116,7 +116,7 @@ public class ServiceMethodGeneratorTest {
 		
 		assertEquals("@GET\r\n"
 				+ "@Path(\"/path/to/here\")\r\n"
-				+ "public SuperType pathToHere(@QueryParameter boolean checked, @QueryParameter String type) {\r\n"
+				+ "public SuperType pathToHere(@QueryParam(\"checked\") boolean checked, @QueryParam(\"type\") String type) {\r\n"
 				+ "	//TODO\r\n"
 				+ "}\r\n"
 				+ "",

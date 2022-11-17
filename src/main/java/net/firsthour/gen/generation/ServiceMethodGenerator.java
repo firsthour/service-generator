@@ -44,10 +44,10 @@ public class ServiceMethodGenerator {
 			final String delim = service.getQueryParameters().size() > 2 ? NEWLINE + INDENT : " ";
 			builder.append(
 				service.getQueryParameters().stream()
-					.map(query -> query.getType() + " " + query.getName())
+					.map(query -> query.getName() + "\") " + query.getType() + " " + query.getName())
 					.collect(Collectors.joining(
-						"," + delim + "@QueryParameter ",
-						"@QueryParameter ",
+						"," + delim + "@QueryParam(\"",
+						"@QueryParam(\"",
 						"")));
 		}
 		
