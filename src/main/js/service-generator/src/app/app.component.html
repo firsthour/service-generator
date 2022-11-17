@@ -1,0 +1,173 @@
+<div class="surface-section px-4 py-5 md:px-6 lg:px-8">
+  <ul class="list-none p-0 m-0 flex align-items-center font-medium mb-3">
+      <li>
+          <a class="text-500 no-underline line-height-3 cursor-pointer">Services</a>
+      </li>
+      <li class="px-2">
+          <i class="pi pi-angle-right text-500 line-height-3"></i>
+      </li>
+      <li>
+          <span class="text-900 line-height-3 testHook">Generate</span>
+      </li>
+  </ul>
+  
+  <div class="grid">
+    <div class="col-3">
+      <h4>Method</h4>
+      <p-dropdown
+        [options]="methods"
+        [(ngModel)]="serviceMethod.method"
+        placeholder="Select a Method"
+        (onChange)="dropdownChange($event)">
+      </p-dropdown>
+
+      <h4>Path</h4>
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="serviceMethod.path"
+        (change)="generate()"
+        (keydown.space)="$event.preventDefault()">
+
+      <h4>Return Class</h4>
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="serviceMethod.returnClass"
+        (change)="generate()"
+        (keydown.space)="$event.preventDefault()">
+
+      <h4>Options</h4>
+      <div class="field-checkbox">
+        <p-checkbox
+          [(ngModel)]="serviceMethod.includeConsumes"
+          [binary]="true"
+          inputId="includeConsumes"
+          (onChange)="generate()">
+        </p-checkbox>
+        <label for="includeConsumes">Include @Consumes</label>
+      </div>
+      <div class="field-checkbox">
+        <p-checkbox
+          [(ngModel)]="serviceMethod.includeProduces"
+          [binary]="true"
+          inputId="includeProduces"
+          (onChange)="generate()">
+        </p-checkbox>
+        <label for="includeProduces">Include @Produces</label>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <h4>Query Parameters</h4>
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="newQueryParameterName"
+        placeholder="Parameter Name"
+        (change)="generate()"
+        (keydown.space)="$event.preventDefault()">
+      <div style="margin-top: 5px; margin-bottom: 5px">
+        <p-dropdown
+          [options]="queryParameterTypes"
+          [(ngModel)]="newQueryParameterType"
+          placeholder="Select a Type">
+        </p-dropdown>
+      </div>
+
+      <p-button
+        label="Add"
+        (click)="addQueryParameter()"
+        [disabled]="!newQueryParameterName">
+      </p-button>
+
+      <div *ngFor="let query of serviceMethod.queryParameters; let i = index">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-times"
+            class="p-button-rounded p-button-text p-button-plain"
+            title="Remove"
+            style="vertical-align: middle"
+            (click)="removeQueryParameter(i)">
+          </button>
+          <span>{{query.type}} {{query.name}}</span>
+      </div>
+
+      <h4>POST Parameter</h4>
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="serviceMethod.postParameterName"
+        placeholder="Parameter Name"
+        (change)="generate()"
+        (keydown.space)="$event.preventDefault()"
+        [disabled]="serviceMethod.method !== 'POST'"
+        title="Requires POST">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="serviceMethod.postParameterType"
+        placeholder="Parameter Type"
+        (change)="generate()"
+        (keydown.space)="$event.preventDefault()"
+        [disabled]="serviceMethod.method !== 'POST'"
+        title="Requires POST"
+        style="margin-top: 5px">
+    </div>
+
+    <div sclass="col-6">
+      <h4>Output</h4>
+      <pre>{{output}}</pre>
+      <button
+        pButton
+        ngxClipboard
+        [cbContent]="output"
+        (cbOnSuccess)="showClipboardSuccess()"
+        type="button"
+        label="Copy"
+        icon="pi pi-copy"
+        [disabled]="!output">
+      </button>
+      <button
+        pButton
+        type="button"
+        (click)="save()"
+        label="Save"
+        icon="pi pi-save"
+        [disabled]="!output"
+        style="margin-left: 10px">
+      </button>
+      <button
+        pButton
+        type="button"
+        (click)="showLoadDialog()"
+        label="Load"
+        icon="pi pi-folder-open"
+        [disabled]="!output"
+        style="margin-left: 10px">
+      </button>
+    </div>
+  </div>
+</div>
+
+<p-toast></p-toast>
+
+<p-dialog
+  header="Select a Saved Service"
+  [(visible)]="displayLoadDialog"
+  [modal]="true">
+  <div *ngIf="loadedServiceMethods.length == 0">No methods to load.</div>
+  <div *ngFor="let method of loadedServiceMethods">
+    <button
+      pButton
+      type="button"
+      icon="pi pi-folder-open"
+      class="p-button-rounded p-button-text p-button-plain"
+      title="Load"
+      style="vertical-align: middle"
+      (click)="loadMethod(method)">
+    </button>
+    {{method.method}} - {{method.path}}
+  </div>
+</p-dialog>
