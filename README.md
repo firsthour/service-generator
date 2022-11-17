@@ -1,0 +1,1 @@
+Simple Springboot Angular project to generate JAX-RS REST services.
